@@ -33,8 +33,35 @@ app.post('/api/v1/signup', async(c) => {
     return c.json({ token });
 })
 
-app.post('/api/v1/signin', (c) => {
-    return c.text('Hello Hono!')
+app.post('/api/v1/signin', async (c) => {
+
+    const prisma = new PrismaClient({
+        datasourceUrl: c.env.DATABASE_URL,
+    }).$extends(withAccelerate());
+
+    const { email, password } = await c.req.json();
+    let user;
+
+    try {
+        user = await prisma.user.findUnique({
+            where : {
+                email : email
+            }
+        })
+    } catch (error) {
+        return c.json({"message" : "User not found"});
+    }
+
+    if(password!=user?.password){
+        return c.json({"message" : "Wrong password!!"});
+    }
+
+    const payload = {
+        id : user?.id
+    }
+
+    const token = await sign(payload, c.env.JSON_SECRET);
+    return c.json({token});
 })
 
 app.post('/api/v1/blog', (c) => {
