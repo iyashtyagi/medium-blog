@@ -2,10 +2,11 @@ import { PrismaClient } from "@prisma/client/edge";
 import { withAccelerate } from "@prisma/extension-accelerate";
 import { Hono } from "hono";
 import { verify } from "hono/jwt";
-import { BindingTypes } from "../index";
+import { BindingTypes, VariablesTypes } from "../index";
 
 export const blogRouter = new Hono<{
-    Bindings: BindingTypes
+    Bindings: BindingTypes,
+    Variables: VariablesTypes
 }>();
 
 blogRouter.use("/*", async (c, next)=>{
@@ -16,8 +17,7 @@ blogRouter.use("/*", async (c, next)=>{
     
     try {
         const result = await verify(token, c.env.JSON_SECRET);
-        // @ts-ignore
-        c.set("userId", result.id);
+        c.set("userId", String(result.id));
         await next();
     } catch (error) {
         return c.json({"message": "Invalid token"}, 401)
@@ -36,7 +36,6 @@ blogRouter.post('/', async (c) => {
         data: {
             title: body.title,
             description: body.description,
-            // @ts-ignore
             authorId: c.get("userId")
         }
     })

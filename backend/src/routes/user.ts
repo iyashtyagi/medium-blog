@@ -2,10 +2,11 @@ import { PrismaClient } from "@prisma/client/edge";
 import { withAccelerate } from "@prisma/extension-accelerate";
 import { Hono } from "hono";
 import { sign } from "hono/jwt";
-import { BindingTypes } from "../index";
+import { BindingTypes, VariablesTypes } from "../index";
 
 export const userRouter = new Hono<{
-    Bindings: BindingTypes
+    Bindings: BindingTypes,
+    Variables: VariablesTypes
 }>();
 
 userRouter.post('/signup', async(c) => {

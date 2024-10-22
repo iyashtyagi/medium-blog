@@ -7,6 +7,10 @@ export interface BindingTypes{
     JSON_SECRET : string;
 }
 
+export interface VariablesTypes{
+    userId : string;
+}
+
 const app = new Hono<{Bindings: BindingTypes}>();
 
 app.route('/api/v1/user', userRouter);
