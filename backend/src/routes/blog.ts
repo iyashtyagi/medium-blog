@@ -26,7 +26,7 @@ blogRouter.use("/*", async (c, next)=>{
 
 
 blogRouter.post('/', async (c) => {
-        const prisma = new PrismaClient({
+    const prisma = new PrismaClient({
         datasourceUrl: c.env.DATABASE_URL,
     }).$extends(withAccelerate());
 
@@ -48,8 +48,23 @@ blogRouter.put('/', (c) => {
   return c.text('Hello Hono!')
 })
 
-blogRouter.get('/', (c) => {
-  return c.text('Hello Hono!')
+blogRouter.get('/:id', async (c) => {
+    const prisma = new PrismaClient({
+        datasourceUrl: c.env.DATABASE_URL,
+    }).$extends(withAccelerate());
+
+    const id = c.req.param('id');
+
+    try {
+        const blog = await prisma.post.findFirst({
+            where : {
+                id : id
+            }
+        });
+        return c.json({blog}, 200);
+    } catch (error) {
+        return c.json({"message": "Error while fetching blog post"});
+    }
 })
 
 blogRouter.get('/bulk', (c) => {
