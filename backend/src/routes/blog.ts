@@ -26,7 +26,22 @@ blogRouter.use("/*", async (c, next)=>{
 
 
 blogRouter.post('/', async (c) => {
+        const prisma = new PrismaClient({
+        datasourceUrl: c.env.DATABASE_URL,
+    }).$extends(withAccelerate());
 
+    const body = await c.req.json();
+    
+    const blog = await prisma.post.create({
+        data: {
+            title: body.title,
+            description: body.description,
+            // @ts-ignore
+            authorId: c.get("userId")
+        }
+    })
+
+    return c.json({blog});
 })
 
 blogRouter.put('/', (c) => {
