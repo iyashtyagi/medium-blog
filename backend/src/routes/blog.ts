@@ -43,8 +43,38 @@ blogRouter.post('/', async (c) => {
     return c.json({blog});
 })
 
-blogRouter.put('/', (c) => {
-  return c.text('Hello Hono!')
+blogRouter.put('/', async (c) => {
+    const prisma = new PrismaClient({
+        datasourceUrl: c.env.DATABASE_URL,
+    }).$extends(withAccelerate());    
+
+    const userId = c.get("userId");
+    const body = await c.req.json();
+    console.log(body.id)
+    if(!body.id){
+        return c.json({"message": "Invalid inputs"},411);
+    }
+    const blog = await prisma.post.findFirst({
+        where : {
+            id: body.id
+        }
+    })
+
+    if(!blog || userId != blog.authorId){
+        return c.json({"message": "Blog doesn't exist or you don't have permission to update this blog"});
+    }
+
+    const result = await prisma.post.update({
+        where : {
+            id : body.id
+        }, 
+        data :{
+            title: body.title,
+            description: body.description
+        }
+    })
+    
+    return c.json({result});
 })
 
 blogRouter.get('/bulk', async (c) => {
