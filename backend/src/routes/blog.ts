@@ -17,7 +17,7 @@ blogRouter.use("/*", async (c, next)=>{
     }
     
     try {
-        const result = await verify(token, c.env.JSON_SECRET);
+        const result = await verify(token, c.env.JWT_SECRET);
         c.set("userId", String(result.id));
         await next();
     } catch (error) {

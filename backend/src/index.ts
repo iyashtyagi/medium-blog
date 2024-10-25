@@ -4,7 +4,7 @@ import { blogRouter } from './routes/blog'
 
 export interface BindingTypes{
     DATABASE_URL : string;
-    JSON_SECRET : string;
+    JWT_SECRET : string;
 }
 
 export interface VariablesTypes{
