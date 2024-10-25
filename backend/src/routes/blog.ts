@@ -3,6 +3,7 @@ import { withAccelerate } from "@prisma/extension-accelerate";
 import { Hono } from "hono";
 import { verify } from "hono/jwt";
 import { BindingTypes, VariablesTypes } from "../index";
+import { createBlogInput, updateBlogInput } from "@yashtyagi/medium-common";
 
 export const blogRouter = new Hono<{
     Bindings: BindingTypes,
@@ -31,7 +32,13 @@ blogRouter.post('/', async (c) => {
     }).$extends(withAccelerate());
 
     const body = await c.req.json();
-    
+
+    const { success } = createBlogInput.safeParse(body);
+
+    if(!success){
+        return c.json({"message": "Invalid inputs"}, 411)
+    }
+
     const blog = await prisma.post.create({
         data: {
             title: body.title,
@@ -50,10 +57,13 @@ blogRouter.put('/', async (c) => {
 
     const userId = c.get("userId");
     const body = await c.req.json();
-    console.log(body.id)
-    if(!body.id){
-        return c.json({"message": "Invalid inputs"},411);
+
+    const { success } = updateBlogInput.safeParse(body);
+
+    if(!success){
+        return c.json({"message": "Invalid inputs"}, 411)
     }
+
     const blog = await prisma.post.findFirst({
         where : {
             id: body.id
@@ -70,7 +80,8 @@ blogRouter.put('/', async (c) => {
         }, 
         data :{
             title: body.title,
-            description: body.description
+            description: body.description,
+            published: body.published
         }
     })
     

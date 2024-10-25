@@ -3,6 +3,8 @@ import { withAccelerate } from "@prisma/extension-accelerate";
 import { Hono } from "hono";
 import { sign } from "hono/jwt";
 import { BindingTypes, VariablesTypes } from "../index";
+import { signinInput, signupInput } from "@yashtyagi/medium-common";
+
 
 export const userRouter = new Hono<{
     Bindings: BindingTypes,
@@ -15,6 +17,12 @@ userRouter.post('/signup', async(c) => {
     }).$extends(withAccelerate());
 
     const body = await c.req.json();
+
+    const { success } = signupInput.safeParse(body);
+    if(!success){
+        return c.json({mesaage : "Invalid inupts"}, 411);
+    }
+
     const user = await prisma.user.create({
         data : {
             email :  body.email,
@@ -39,6 +47,12 @@ userRouter.post('/signin', async (c) => {
     }).$extends(withAccelerate());
 
     const { email, password } = await c.req.json();
+
+    const { success } = signinInput.safeParse({email, password});
+    if(!success){
+        return c.json({mesaage : "Invalid inupts"}, 411);
+    }
+
     let user;
 
     try {
