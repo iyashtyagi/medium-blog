@@ -1,0 +1,1 @@
+export const BACKEND_URL = "https://backend.contactyashtyagi.workers.dev/api/v1"
