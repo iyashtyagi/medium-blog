@@ -1,7 +1,7 @@
 import { SinginInput } from "@yashtyagi/medium-common"
 import { useState } from "react"
 import { Link, useNavigate } from "react-router-dom"
-import { InputBox } from "./InputBox"
+import { InputBox, InputBoxType } from "./InputBox"
 import { Button } from "./Button"
 import axios from "axios"
 import { BACKEND_URL } from "../config"
@@ -45,7 +45,7 @@ export const SigninAuth = () => {
                     <InputBox label="Email" placeholder="me@example.com" onChange={(e) =>{
                         setPostInput({...postInput, email:e.target.value})
                     }} />
-                    <InputBox label="Password" type="password" placeholder="12345678" onChange={(e) =>{
+                    <InputBox label="Password" type={InputBoxType.Passowrd} placeholder="12345678" onChange={(e) =>{
                         setPostInput({...postInput, password:e.target.value})
                     }} />
 
