@@ -94,9 +94,24 @@ blogRouter.get('/bulk', async (c) => {
     }).$extends(withAccelerate());
 
     // todo: add pagination
-
+    
     try{
-        const blogs = await prisma.post.findMany();
+        const blogs = await prisma.post.findMany({
+            where: {
+                published : true
+            },
+            select: {
+                id: true,
+                title: true,
+                description: true,
+                author: {
+                    select: {
+                        id: true,
+                        name: true
+                    }
+                }
+            }
+        });
         return c.json({blogs}, 200);
     }
     catch(error){
