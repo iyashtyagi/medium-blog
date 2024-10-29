@@ -1,4 +1,5 @@
-import { AvatarType, NameAvatar } from "./NameAvatar";
+import { AvatarType } from "../types";
+import { NameAvatar } from "./NameAvatar";
 
 export const AppBar = () => {
     return <div className="flex justify-between px-6 pt-3 pb-2 border-b">

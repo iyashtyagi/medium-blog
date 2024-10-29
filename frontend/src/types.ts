@@ -7,3 +7,8 @@ export interface BlogStructure{
         name: string;
     };
 }
+
+export enum AvatarType{
+    Small = 6,
+    Big = 8
+}

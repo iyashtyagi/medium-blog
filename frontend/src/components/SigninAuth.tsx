@@ -21,7 +21,7 @@ export const SigninAuth = () => {
             const response = await axios.post(singupUrl, postInput)
             const jwt = response.data.token;
             localStorage.setItem("token", jwt);
-            navigate("/blog");
+            navigate("/blogs");
         } catch (error) {
             alert("Something went wrong");
         }
