@@ -35,9 +35,8 @@ export const FullBlog = ({blog}:{blog:BlogStructure}) =>{
                             <p>
                                 Random catch phrase about the author's ability to grab the user's attention.
                             </p>
+                        </div>
                     </div>
-                </div>
-
                 </div>
             </div>
         </div>
