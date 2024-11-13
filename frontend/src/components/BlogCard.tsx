@@ -40,14 +40,14 @@ export const BlogCard = ({id, authorName, title, description, publishedDate}: Ca
             </div>
 
             <div className="text-sm font-light text-slate-400 pt-5">
-                {`${Math.ceil(description.length/100)}`} {description.length>100 ? " minutes read" : "minute"}
+                {`${Math.ceil(description.split(" ").length / 100)}`} {description.split(" ").length > 100 ? " minutes read" : "minute"}
             </div>
 
         </div>
     </Link>
 }
 
-function Circle(){
+export function Circle(){
     return <div className="h-1 w-1 bg-slate-400 rounded-full">
     </div>
 }
