@@ -43,6 +43,7 @@ blogRouter.post('/', async (c) => {
         data: {
             title: body.title,
             description: body.description,
+            published: body.published || false,
             authorId: c.get("userId")
         }
     })
